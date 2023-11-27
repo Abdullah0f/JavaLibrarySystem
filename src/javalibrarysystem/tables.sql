@@ -7,17 +7,13 @@ CREATE TABLE Genres (
     id INT AUTO_INCREMENT PRIMARY KEY,
     genre VARCHAR(100) NOT NULL
 );
-CREATE TABLE Books (
+CREATE TABLE Users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    userId INT,
-    genreId INT,
-    authorId INT,
-    publish_date DATE,
-    FOREIGN KEY (userId) REFERENCES Users(id),
-    FOREIGN KEY (genreId) REFERENCES Genres(id),
-    FOREIGN KEY (authorId) REFERENCES Authors(id)
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL 
 );
+
 
 CREATE TABLE Books (
     id INT AUTO_INCREMENT PRIMARY KEY,
