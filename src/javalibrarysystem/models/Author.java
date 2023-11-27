@@ -32,7 +32,7 @@ public class Author {
     // Method to insert a new author
     public static void insert(String authorName, Date dob) {
         DB db = new DB();
-        String query = "INSERT INTO Authors (author_name, DOB) VALUES (?, ?)";
+        String query = "INSERT INTO Authors (authorName, DOB) VALUES (?, ?)";
         try (Connection conn = db.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, authorName);
@@ -66,7 +66,7 @@ public class Author {
     // Method to update an author's information
     public static void update(int id, String authorName, Date dob) {
         DB db = new DB();
-        String query = "UPDATE Authors SET author_name = ?, DOB = ? WHERE id = ?";
+        String query = "UPDATE Authors SET authorName = ?, DOB = ? WHERE id = ?";
         try (Connection conn = db.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, authorName);

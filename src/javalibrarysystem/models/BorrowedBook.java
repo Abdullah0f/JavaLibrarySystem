@@ -22,7 +22,7 @@ public class BorrowedBook {
     // Method to insert a new borrowed book entry
     public static void insert(int bookId, int userId, Date borrowDate) {
         DB db = new DB();
-        String query = "INSERT INTO BorrowedBooks (bookId, userId, borrow_date) VALUES (?, ?, ?)";
+        String query = "INSERT INTO BorrowedBooks (bookId, userId, borrowDate) VALUES (?, ?, ?)";
         try (Connection conn = db.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, bookId);
@@ -57,7 +57,7 @@ public class BorrowedBook {
     // Method to update a borrowed book's information
     public static void update(int id, int bookId, int userId, Date borrowDate) {
         DB db = new DB();
-        String query = "UPDATE BorrowedBooks SET bookId = ?, userId = ?, borrow_date = ? WHERE id = ?";
+        String query = "UPDATE BorrowedBooks SET bookId = ?, userId = ?, borrowDate = ? WHERE id = ?";
         try (Connection conn = db.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, bookId);
