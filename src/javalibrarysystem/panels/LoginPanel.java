@@ -3,6 +3,7 @@ package javalibrarysystem.panels;
 import javax.swing.*;
 
 import javalibrarysystem.LoginManager;
+import javalibrarysystem.MainUI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,8 +14,11 @@ public class LoginPanel extends JPanel {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton registerButton;
+    private MainUI mainFrame; // Reference to the MainUI frame
 
-    public LoginPanel() {
+    // Constructor now receives MainUI reference
+    public LoginPanel(MainUI mainFrame) {
+        this.mainFrame = mainFrame;
         setLayout(new GridLayout(3, 2, 10, 10));
 
         // Initialize components
@@ -54,7 +58,8 @@ public class LoginPanel extends JPanel {
         if (LoginManager.login(email, new String(password))) {
             // Login successful
             JOptionPane.showMessageDialog(this, "Login Successful", "Success", JOptionPane.INFORMATION_MESSAGE);
-            // Proceed to next part of application
+            // Switch to another panel or functionality as needed
+            // Example: mainFrame.switchPanel("SomeOtherPanelName");
         } else {
             // Login failed
             JOptionPane.showMessageDialog(this, "Invalid email or password", "Error", JOptionPane.ERROR_MESSAGE);
@@ -62,7 +67,7 @@ public class LoginPanel extends JPanel {
     }
 
     private void handleRegistration() {
-        // This can open a registration dialog or panel
-        // For simplicity, it's not implemented here
+        // Switch to the registration panel
+        mainFrame.switchPanel("RegistrationPanel");
     }
 }
