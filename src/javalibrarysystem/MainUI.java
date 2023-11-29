@@ -17,6 +17,12 @@ public class MainUI extends JFrame {
         // Adding panels to CardLayout
         cardPanel.add(new LoginPanel(this), "LoginPanel");
         cardPanel.add(new RegistrationPanel(this), "RegistrationPanel");
+        cardPanel.add(new UsersPanel(this), "UsersPanel");
+        cardPanel.add(new BooksPanel(), "BooksPanel");
+        cardPanel.add(new AuthorsPanel(), "AuthorsPanel");
+        cardPanel.add(new GenresPanel(), "GenresPanel");
+        cardPanel.add(new BorrowedBooksPanel(), "BorrowedBooksPanel");
+
         // Add other panels here, for example:
         // cardPanel.add(new BookPanel(this), "BookPanel");
         // cardPanel.add(new UserPanel(this), "UserPanel");
@@ -45,9 +51,29 @@ public class MainUI extends JFrame {
         loginItem.addActionListener(e -> switchPanel("LoginPanel"));
         JMenuItem registerItem = new JMenuItem("Register");
         registerItem.addActionListener(e -> switchPanel("RegistrationPanel"));
+
+        JMenuItem usersItem = new JMenuItem("Users");
+        usersItem.addActionListener(e -> switchPanel("UsersPanel"));
+
+        JMenuItem booksItem = new JMenuItem("Books");
+        booksItem.addActionListener(e -> switchPanel("BooksPanel"));
+
+        JMenuItem genresItem = new JMenuItem("Genres");
+        genresItem.addActionListener(e -> switchPanel("GenresPanel"));
+
+        JMenuItem authorsItem = new JMenuItem("Authors");
+        authorsItem.addActionListener(e -> switchPanel("AuthorsPanel"));
+
+        JMenuItem bookAuthorsItem = new JMenuItem("Borrowed Books");
+        bookAuthorsItem.addActionListener(e -> switchPanel("BorrowedBooksPanel"));
         // Add menu items for other panels
         menu.add(loginItem);
         menu.add(registerItem);
+        menu.add(usersItem);
+        menu.add(booksItem);
+        menu.add(genresItem);
+        menu.add(authorsItem);
+        menu.add(bookAuthorsItem);
         menuBar.add(menu);
         setJMenuBar(menuBar);
     }
