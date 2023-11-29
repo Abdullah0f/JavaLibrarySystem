@@ -16,10 +16,12 @@ public class LoginPanel extends JPanel {
     private JButton registerButton;
     private MainUI mainFrame; // Reference to the MainUI frame
 
-    // Constructor now receives MainUI reference
     public LoginPanel(MainUI mainFrame) {
         this.mainFrame = mainFrame;
-        setLayout(new GridLayout(3, 2, 10, 10));
+        setLayout(new BorderLayout(10, 10));
+
+        // Create a panel for form elements with FlowLayout
+        JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         // Initialize components
         emailField = new JTextField(20);
@@ -27,13 +29,20 @@ public class LoginPanel extends JPanel {
         loginButton = new JButton("Login");
         registerButton = new JButton("Register");
 
-        // Add components to panel
-        add(new JLabel("Email:"));
-        add(emailField);
-        add(new JLabel("Password:"));
-        add(passwordField);
-        add(loginButton);
-        add(registerButton);
+        // Add components to form panel
+        formPanel.add(new JLabel("Email:"));
+        formPanel.add(emailField);
+        formPanel.add(new JLabel("Password:"));
+        formPanel.add(passwordField);
+
+        // Create a panel for buttons with FlowLayout
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.add(loginButton);
+        buttonPanel.add(registerButton);
+
+        // Add formPanel and buttonPanel to main panel
+        add(formPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
 
         // Event handling
         loginButton.addActionListener(new ActionListener() {
@@ -42,6 +51,7 @@ public class LoginPanel extends JPanel {
                 handleLogin();
             }
         });
+
 
         registerButton.addActionListener(new ActionListener() {
             @Override

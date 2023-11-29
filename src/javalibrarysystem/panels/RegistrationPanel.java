@@ -1,10 +1,8 @@
 package javalibrarysystem.panels;
 
 import javax.swing.*;
-
 import javalibrarysystem.LoginManager;
 import javalibrarysystem.MainUI;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +15,10 @@ public class RegistrationPanel extends JPanel {
 
     public RegistrationPanel(MainUI mainFrame) {
         this.mainUI = mainFrame;
-        setLayout(new GridLayout(4, 2, 10, 10));
+        setLayout(new BorderLayout(10, 10));
+
+        // Create a panel for form elements with FlowLayout
+        JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         // Initialize components
         nameField = new JTextField(20);
@@ -25,14 +26,21 @@ public class RegistrationPanel extends JPanel {
         passwordField = new JPasswordField(20);
         registerButton = new JButton("Register");
 
-        // Add components to panel
-        add(new JLabel("Name:"));
-        add(nameField);
-        add(new JLabel("Email:"));
-        add(emailField);
-        add(new JLabel("Password:"));
-        add(passwordField);
-        add(registerButton);
+        // Add components to form panel
+        formPanel.add(new JLabel("Name:"));
+        formPanel.add(nameField);
+        formPanel.add(new JLabel("Email:"));
+        formPanel.add(emailField);
+        formPanel.add(new JLabel("Password:"));
+        formPanel.add(passwordField);
+
+        // Create a panel for the register button with FlowLayout
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.add(registerButton);
+
+        // Add formPanel and buttonPanel to main panel
+        add(formPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
 
         // Event handling
         registerButton.addActionListener(new ActionListener() {
