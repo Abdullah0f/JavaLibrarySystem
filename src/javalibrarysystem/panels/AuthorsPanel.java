@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AuthorsPanel extends JPanel {
+
     private JTable authorsTable;
     private DefaultTableModel tableModel;
     private JTextField authorNameField, dobField;
@@ -43,7 +44,7 @@ public class AuthorsPanel extends JPanel {
     }
 
     private void initializeTable() {
-        String[] columnNames = { "ID", "Author Name", "DOB" };
+        String[] columnNames = {"ID", "Author Name", "DOB"};
         tableModel = new DefaultTableModel(columnNames, 0);
         authorsTable = new JTable(tableModel);
     }
@@ -82,17 +83,9 @@ public class AuthorsPanel extends JPanel {
     }
 
     private void loadAuthorData() {
-        return;
-        // try {
-        // ResultSet rs = Author.getAll();
-        // tableModel.setRowCount(0); // Clear existing data
-        // while (rs.next()) {
-        // Object[] row = { rs.getInt("id"), rs.getString("authorName"),
-        // rs.getDate("DOB").toString() };
-        // tableModel.addRow(row);
-        // }
-        // } catch (SQLException e) {
-        // e.printStackTrace();
-        // }
+        tableModel.setRowCount(0); // Clear existing data
+            Author.getAll (tableModel);
+
     }
+
 }

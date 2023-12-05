@@ -23,7 +23,7 @@ public class LoginManager {
     // Method to handle user login
     public static boolean login(String email, String password) {
         DB db = new DB();
-        String query = "SELECT * FROM Users WHERE email = ?";
+        String query = "SELECT * FROM library.users WHERE email = ?";
 
         try (Connection conn = db.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(query)) {

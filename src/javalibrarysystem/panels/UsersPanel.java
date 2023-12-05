@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UsersPanel extends JPanel {
+
     private JTable usersTable;
     private DefaultTableModel tableModel;
     private JTextField nameField, emailField, passwordField;
@@ -45,7 +46,7 @@ public class UsersPanel extends JPanel {
     }
 
     private void initializeTable() {
-        String[] columnNames = { "ID", "Name", "Email" };
+        String[] columnNames = {"ID", "Name", "Email"};
         tableModel = new DefaultTableModel(columnNames, 0);
         usersTable = new JTable(tableModel);
     }
@@ -68,32 +69,35 @@ public class UsersPanel extends JPanel {
 
     private void addUser(ActionEvent e) {
         // Implement adding a user
-        // Example: User.insert(nameField.getText(), emailField.getText(),
-        // passwordField.getText());
+        User.insert(nameField.getText(), emailField.getText(), passwordField.getText());
+        loadUserData(); // Refresh the table after adding a user
     }
 
     private void deleteUser(ActionEvent e) {
         // Implement deleting a selected user
-        // Example: int selectedRow = usersTable.getSelectedRow();
-        // if(selectedRow >= 0) { User.delete((Integer)
-        // tableModel.getValueAt(selectedRow, 0)); }
+        int selectedRow = usersTable.getSelectedRow();
+        if (selectedRow >= 0) {
+            int userId = (Integer) tableModel.getValueAt(selectedRow, 0);
+            User.delete(userId);
+            loadUserData(); // Refresh the table after deleting a user
+        }
     }
 
     private void updateUser(ActionEvent e) {
         // Implement updating a selected user
+        int selectedRow = usersTable.getSelectedRow();
+        if (selectedRow >= 0) {
+            int userId = (Integer) tableModel.getValueAt(selectedRow, 0);
+            String newName = nameField.getText();
+            String newEmail = emailField.getText();
+            String newPassword = passwordField.getText();
+            User.update(userId, newName, newEmail, newPassword);
+            loadUserData(); // Refresh the table after updating a user
+        }
     }
 
     private void loadUserData() {
-        return;
-        // try {
-        // ResultSet rs = User.getAll();
-        // while (rs.next()) {
-        // Object[] row = { rs.getInt("id"), rs.getString("name"), rs.getString("email")
-        // };
-        // tableModel.addRow(row);
-        // }
-        // } catch (SQLException e) {
-        // e.printStackTrace();
-        // }
+        tableModel.setRowCount(0); // Clear existing data
+        User.getAll(tableModel);
     }
 }

@@ -3,6 +3,7 @@ package javalibrarysystem.models;
 import java.sql.*;
 
 import javalibrarysystem.DB;
+import javax.swing.table.DefaultTableModel;
 
 public class BorrowedBook {
     private int id;
@@ -14,15 +15,34 @@ public class BorrowedBook {
     // ...
 
     // Method to get all borrowed books
-    public static ResultSet getAll() {
-        DB db = new DB();
-        return db.executeQuery("SELECT * FROM BorrowedBooks");
+    public static void getAll(DefaultTableModel tableModel) {
+    DB db = new DB();
+    ResultSet rs = null;
+    Statement stmt = null;
+    try {
+        rs = db.executeQuery("SELECT * FROM library.borrowedbooks");
+        stmt = rs.getStatement(); // Get the statement associated with this ResultSet
+        while (rs.next()) {
+            Object[] row = { rs.getInt(1), rs.getInt(2),rs.getInt(3), rs.getDate(4) };
+            tableModel.addRow(row);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+}
 
     // Method to insert a new borrowed book entry
     public static void insert(int bookId, int userId, Date borrowDate) {
         DB db = new DB();
-        String query = "INSERT INTO BorrowedBooks (bookId, userId, borrowDate) VALUES (?, ?, ?)";
+        String query = "INSERT INTO library.borrowedbooks (bookId, userId, borrowDate) VALUES (?, ?, ?)";
         try (Connection conn = db.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, bookId);
@@ -37,14 +57,14 @@ public class BorrowedBook {
     // Method to get a specific borrowed book entry
     public static ResultSet get(String whereClause) {
         DB db = new DB();
-        String query = "SELECT * FROM BorrowedBooks WHERE " + whereClause;
+        String query = "SELECT * FROM library.borrowedbooks WHERE " + whereClause;
         return db.executeQuery(query);
     }
 
     // Method to delete a borrowed book entry by ID
     public static void delete(int id) {
         DB db = new DB();
-        String query = "DELETE FROM BorrowedBooks WHERE id = ?";
+        String query = "DELETE FROM library.borrowedbooks WHERE id = ?";
         try (Connection conn = db.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, id);
@@ -57,7 +77,7 @@ public class BorrowedBook {
     // Method to update a borrowed book's information
     public static void update(int id, int bookId, int userId, Date borrowDate) {
         DB db = new DB();
-        String query = "UPDATE BorrowedBooks SET bookId = ?, userId = ?, borrowDate = ? WHERE id = ?";
+        String query = "UPDATE library.borrowedbooks SET bookId = ?, userId = ?, borrowDate = ? WHERE id = ?";
         try (Connection conn = db.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, bookId);

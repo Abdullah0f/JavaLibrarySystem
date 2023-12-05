@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class GenresPanel extends JPanel {
+
     private JTable genresTable;
     private DefaultTableModel tableModel;
     private JTextField genreField;
@@ -42,7 +43,7 @@ public class GenresPanel extends JPanel {
     }
 
     private void initializeTable() {
-        String[] columnNames = { "ID", "Genre" };
+        String[] columnNames = {"ID", "Genre"};
         tableModel = new DefaultTableModel(columnNames, 0);
         genresTable = new JTable(tableModel);
     }
@@ -77,16 +78,7 @@ public class GenresPanel extends JPanel {
     }
 
     private void loadGenreData() {
-        return;
-        // try {
-        // ResultSet rs = Genre.getAll();
-        // tableModel.setRowCount(0); // Clear existing data
-        // while (rs.next()) {
-        // Object[] row = { rs.getInt("id"), rs.getString("genre") };
-        // tableModel.addRow(row);
-        // }
-        // } catch (SQLException e) {
-        // e.printStackTrace();
-        // }
+        tableModel.setRowCount(0); // Clear existing data
+        Genre.getAll(tableModel);
     }
 }

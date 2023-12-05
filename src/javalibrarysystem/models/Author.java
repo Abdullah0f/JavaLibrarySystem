@@ -3,6 +3,7 @@ package javalibrarysystem.models;
 import java.sql.*;
 
 import javalibrarysystem.DB;
+import javax.swing.table.DefaultTableModel;
 
 public class Author {
     private int id;
@@ -24,15 +25,34 @@ public class Author {
     // ...
 
     // Method to get all authors
-    public static ResultSet getAll() {
-        DB db = new DB();
-        return db.executeQuery("SELECT * FROM Authors");
+    public static void getAll(DefaultTableModel tableModel) {
+    DB db = new DB();
+    ResultSet rs = null;
+    Statement stmt = null;
+    try {
+        rs = db.executeQuery("SELECT * FROM library.authors");
+        stmt = rs.getStatement(); // Get the statement associated with this ResultSet
+        while (rs.next()) {
+            Object[] row = { rs.getInt(1),rs.getString(2), rs.getDate(3) };
+            tableModel.addRow(row);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+}
 
     // Method to insert a new author
     public static void insert(String authorName, Date dob) {
         DB db = new DB();
-        String query = "INSERT INTO Authors (authorName, DOB) VALUES (?, ?)";
+        String query = "INSERT INTO library.authors (authorName, DOB) VALUES (?, ?)";
         try (Connection conn = db.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, authorName);
@@ -46,14 +66,14 @@ public class Author {
     // Method to get a specific author (based on a where clause)
     public static ResultSet get(String whereClause) {
         DB db = new DB();
-        String query = "SELECT * FROM Authors WHERE " + whereClause;
+        String query = "SELECT * FROM library.authors WHERE " + whereClause;
         return db.executeQuery(query);
     }
 
     // Method to delete an author by ID
     public static void delete(int id) {
         DB db = new DB();
-        String query = "DELETE FROM Authors WHERE id = ?";
+        String query = "DELETE FROM library.authors WHERE id = ?";
         try (Connection conn = db.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, id);
@@ -66,7 +86,7 @@ public class Author {
     // Method to update an author's information
     public static void update(int id, String authorName, Date dob) {
         DB db = new DB();
-        String query = "UPDATE Authors SET authorName = ?, DOB = ? WHERE id = ?";
+        String query = "UPDATE library.authors SET authorName = ?, DOB = ? WHERE id = ?";
         try (Connection conn = db.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, authorName);

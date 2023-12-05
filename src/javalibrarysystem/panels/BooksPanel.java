@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class BooksPanel extends JPanel {
+
     private JTable booksTable;
     private DefaultTableModel tableModel;
     private JTextField nameField, userIdField, genreIdField, authorIdField, publishDateField;
@@ -43,7 +44,7 @@ public class BooksPanel extends JPanel {
     }
 
     private void initializeTable() {
-        String[] columnNames = { "ID", "Name", "UserID", "GenreID", "AuthorID", "Publish Date" };
+        String[] columnNames = {"ID", "Name", "UserID", "GenreID", "AuthorID", "Publish Date"};
         tableModel = new DefaultTableModel(columnNames, 0);
         booksTable = new JTable(tableModel);
     }
@@ -84,22 +85,7 @@ public class BooksPanel extends JPanel {
     }
 
     private void loadBookData() {
-        return;
-        // try {
-        // ResultSet rs = Book.getAll();
-        // while (rs.next()) {
-        // Object[] row = {
-        // rs.getInt("id"),
-        // rs.getString("name"),
-        // rs.getInt("userId"),
-        // rs.getInt("genreId"),
-        // rs.getInt("authorId"),
-        // rs.getDate("publishDate").toString()
-        // };
-        // tableModel.addRow(row);
-        // }
-        // } catch (SQLException e) {
-        // e.printStackTrace();
-        // }
+        tableModel.setRowCount(0); // Clear existing data
+        Book.getAll(tableModel);
     }
 }
