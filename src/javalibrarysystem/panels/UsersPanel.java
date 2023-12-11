@@ -13,7 +13,7 @@ public class UsersPanel extends JPanel {
 
     private JTable usersTable;
     private DefaultTableModel tableModel;
-    private JTextField nameField, emailField, passwordField;
+    private JTextField  nameField, emailField, passwordField;
     private JButton addButton, deleteButton, updateButton;
     private MainUI mainFrame; // Reference to the MainUI frame
 
@@ -97,7 +97,7 @@ public class UsersPanel extends JPanel {
     }
 
     private void loadUserData() {
-        tableModel.setRowCount(0); // Clear existing data
+       tableModel.setRowCount(0); // Clear existing data
         User.getAll(tableModel);
     }
 }

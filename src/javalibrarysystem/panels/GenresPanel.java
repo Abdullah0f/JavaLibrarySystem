@@ -74,7 +74,13 @@ public class GenresPanel extends JPanel {
     }
 
     private void updateGenre(ActionEvent e) {
-        // Implement updating a selected genre
+        int selectedRow = genresTable.getSelectedRow();
+        if (selectedRow >= 0) {
+            int id = (Integer) tableModel.getValueAt(selectedRow, 0);
+            String genre = genreField.getText();
+            Genre.update(id, genre);
+            loadGenreData(); // Reload the genre data to reflect the update
+        }
     }
 
     private void loadGenreData() {

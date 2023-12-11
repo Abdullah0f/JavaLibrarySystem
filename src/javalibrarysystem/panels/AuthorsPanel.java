@@ -64,9 +64,15 @@ public class AuthorsPanel extends JPanel {
 
     private void addAuthor(ActionEvent e) {
         String authorName = authorNameField.getText();
-        Date dob = Date.valueOf(dobField.getText()); // Convert String to Date
-        Author.insert(authorName, dob);
-        loadAuthorData(); // Reload the author data to reflect the new entry
+        String dobText = dobField.getText(); // Convert String to Date
+
+        try {
+            Date dob = Date.valueOf(dobText);// Convert String to Date
+            Author.insert(authorName, dob);
+            loadAuthorData(); // Reload the author data to reflect the new entry
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid date format. Please use the format: 1999-09-09");
+        }
     }
 
     private void deleteAuthor(ActionEvent e) {
@@ -79,12 +85,19 @@ public class AuthorsPanel extends JPanel {
     }
 
     private void updateAuthor(ActionEvent e) {
-        // Implement updating a selected author
+        int selectedRow = authorsTable.getSelectedRow();
+        if (selectedRow >= 0) {
+            int id = (Integer) tableModel.getValueAt(selectedRow, 0);
+            String authorName = authorNameField.getText();
+            Date dob = Date.valueOf(dobField.getText()); // Convert String to Date
+            Author.update(id, authorName, dob);
+            loadAuthorData(); // Reload the author data to reflect the update
+        }
     }
 
     private void loadAuthorData() {
         tableModel.setRowCount(0); // Clear existing data
-            Author.getAll (tableModel);
+        Author.getAll(tableModel);
 
     }
 

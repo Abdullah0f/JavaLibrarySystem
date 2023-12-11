@@ -1,6 +1,6 @@
 package javalibrarysystem.panels;
 
-import javalibrarysystem.models.Book;
+import javalibrarysystem.models.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -72,16 +72,57 @@ public class BooksPanel extends JPanel {
     }
 
     private void addBook(ActionEvent e) {
-        // Implement adding a book
-        // Convert String to Date: Date.valueOf(publishDateField.getText());
+        String name = nameField.getText();
+        int userId = Integer.parseInt(userIdField.getText());
+        int genreId = Integer.parseInt(genreIdField.getText());
+        int authorId = Integer.parseInt(authorIdField.getText());
+        String publishDateText = publishDateField.getText();
+        if (!Genre.exists(genreId)) {
+            JOptionPane.showMessageDialog(this, "Genre ID does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!Author.exists(authorId)) {
+            JOptionPane.showMessageDialog(this, "Author ID does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (!User.exists(userId)) {
+            JOptionPane.showMessageDialog(this, "User ID does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            Date publishDate = Date.valueOf(publishDateText);// Convert String to Date
+            Book.insert(name, userId, genreId, authorId, publishDate);
+            loadBookData();
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid date format. Please use the format: 1999-09-09");
+        }
     }
 
     private void deleteBook(ActionEvent e) {
-        // Implement deleting a selected book
+        int selectedRow = booksTable.getSelectedRow();
+        if (selectedRow >= 0) {
+            int bookId = (int) booksTable.getValueAt(selectedRow, 0);
+            Book.delete(bookId);
+
+            loadBookData();
+        }
     }
 
     private void updateBook(ActionEvent e) {
-        // Implement updating a selected book
+        int selectedRow = booksTable.getSelectedRow();
+        if (selectedRow >= 0) {
+            int bookId = (int) booksTable.getValueAt(selectedRow, 0);
+            String name = nameField.getText();
+            int userId = Integer.parseInt(userIdField.getText());
+            int genreId = Integer.parseInt(genreIdField.getText());
+            int authorId = Integer.parseInt(authorIdField.getText());
+            Date publishDate = Date.valueOf(publishDateField.getText());
+
+            Book.update(bookId, name, userId, genreId, authorId, publishDate);
+
+            loadBookData();
+        }
     }
 
     private void loadBookData() {

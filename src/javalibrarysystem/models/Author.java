@@ -97,6 +97,21 @@ public class Author {
             e.printStackTrace();
         }
     }
+    public static boolean exists(int id) {
+        DB db = new DB();
+        String query = "SELECT COUNT(*) FROM library.authors WHERE id = ?";
+        try (Connection conn = db.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
 
 // usage

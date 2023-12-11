@@ -36,6 +36,7 @@ public class MainUI extends JFrame {
 
         // Frame settings
         add(cardPanel);
+        setTitle("Java Library System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
         setLocationRelativeTo(null); // Center on screen

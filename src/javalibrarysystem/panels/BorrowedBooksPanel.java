@@ -1,6 +1,6 @@
 package javalibrarysystem.panels;
 
-import javalibrarysystem.models.BorrowedBook;
+import javalibrarysystem.models.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -68,9 +68,23 @@ public class BorrowedBooksPanel extends JPanel {
     private void addBorrowedBook(ActionEvent e) {
         int bookId = Integer.parseInt(bookIdField.getText());
         int userId = Integer.parseInt(userIdField.getText());
-        Date borrowDate = Date.valueOf(borrowDateField.getText()); // Convert String to Date
-        BorrowedBook.insert(bookId, userId, borrowDate);
-        loadBorrowedBookData(); // Reload the data to reflect the new entry
+        String borrowDateText = borrowDateField.getText(); // Convert String to Date
+                if (!Book.exists(bookId)) {
+            JOptionPane.showMessageDialog(this, "Book ID does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (!User.exists(userId)) {
+            JOptionPane.showMessageDialog(this, "USer ID does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+         try {
+            Date borrowDate = Date.valueOf(borrowDateText); // Convert String to Date
+            BorrowedBook.insert(bookId, userId, borrowDate);
+            loadBorrowedBookData(); // Reload the data to reflect the new entry
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid date format. Please use the format: 1999-09-09");
+        }
+
     }
 
     private void deleteBorrowedBook(ActionEvent e) {
@@ -82,8 +96,16 @@ public class BorrowedBooksPanel extends JPanel {
         }
     }
 
-    private void updateBorrowedBook(ActionEvent e) {
-        // Implement updating a selected borrowed book record
+        private void updateBorrowedBook(ActionEvent e) {
+        int selectedRow = borrowedBooksTable.getSelectedRow();
+        if (selectedRow >= 0) {
+            int id = (Integer) tableModel.getValueAt(selectedRow, 0);
+            int bookId = Integer.parseInt(bookIdField.getText());
+            int userId = Integer.parseInt(userIdField.getText());
+            Date borrowDate = Date.valueOf(borrowDateField.getText()); // Convert String to Date
+            BorrowedBook.update(id, bookId, userId, borrowDate);
+            loadBorrowedBookData(); // Reload the data to reflect the update
+        }
     }
 
     private void loadBorrowedBookData() {
