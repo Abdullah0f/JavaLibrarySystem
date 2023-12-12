@@ -1,15 +1,14 @@
 package javalibrarysystem;
 
 import javax.swing.*;
-
 import javalibrarysystem.panels.*;
-
 import java.awt.*;
 
 public class MainUI extends JFrame {
 
     private JPanel cardPanel;
     private CardLayout cardLayout;
+    private JMenuBar menuBar;
 
     public MainUI() {
         cardLayout = new CardLayout();
@@ -24,75 +23,104 @@ public class MainUI extends JFrame {
         cardPanel.add(new GenresPanel(), "GenresPanel");
         cardPanel.add(new BorrowedBooksPanel(), "BorrowedBooksPanel");
 
-        // Add other panels here, for example:
-        // cardPanel.add(new BookPanel(this), "BookPanel");
-        // cardPanel.add(new UserPanel(this), "UserPanel");
-        // ...
+        // Initialize the menu bar
+        menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+
         // Initialize the menu and other UI components
         initUI();
 
         // Set default card
-        cardLayout.show(cardPanel, "LoginPanel");
+        if (LoginManager.isLoggedIn()) {
+            cardLayout.show(cardPanel, "BookPanel");
+        } else {
+            cardLayout.show(cardPanel, "LoginPanel");
+        }
 
         // Frame settings
         add(cardPanel);
-        setTitle("Java Library System");
+        setTitle("Library System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
         setLocationRelativeTo(null); // Center on screen
     }
 
     private void initUI() {
-        // Setup JFrame properties
-        // Create and add JMenuBar with menu items
-        // You can use menu items to switch between cards, for example:
-        JMenuBar menuBar = new JMenuBar();
+        updateMenu();
+    }
+
+
+// Method to update the menu
+public void updateMenu() {
+        menuBar.removeAll();
 
         JMenu navigateMenu = new JMenu("Navigate");
-        JMenuItem loginItem = new JMenuItem("Login");
-        loginItem.addActionListener(e -> switchPanel("LoginPanel"));
-        JMenuItem registerItem = new JMenuItem("Register");
-        registerItem.addActionListener(e -> switchPanel("RegistrationPanel"));
-        navigateMenu.add(loginItem);
-        navigateMenu.add(registerItem);
 
-        JMenu usersMenu = new JMenu("Users");
-        JMenuItem usersItem = new JMenuItem("Users");
-        usersItem.addActionListener(e -> switchPanel("UsersPanel"));
-        usersMenu.add(usersItem);
+        if (LoginManager.isLoggedIn()) {
+            JMenuItem logoutItem = new JMenuItem("Logout");
+            logoutItem.addActionListener(e -> {
+                LoginManager.logout();
+                switchPanel("LoginPanel");
+                updateMenu();  // Update menu after logging out
+            });
+            navigateMenu.add(logoutItem);
 
-        JMenu booksMenu = new JMenu("Books");
-        JMenuItem booksItem = new JMenuItem("Books");
-        booksItem.addActionListener(e -> switchPanel("BooksPanel"));
-        booksMenu.add(booksItem);
+            JMenu usersMenu = new JMenu("Users");
+            JMenuItem usersItem = new JMenuItem("Users");
+            usersItem.addActionListener(e -> switchPanel("UsersPanel"));
+            usersMenu.add(usersItem);
 
-        JMenu genresMenu = new JMenu("Genres");
-        JMenuItem genresItem = new JMenuItem("Genres");
-        genresItem.addActionListener(e -> switchPanel("GenresPanel"));
-        genresMenu.add(genresItem);
+            JMenu booksMenu = new JMenu("Books");
+            JMenuItem booksItem = new JMenuItem("Books");
+            booksItem.addActionListener(e -> switchPanel("BooksPanel"));
+            booksMenu.add(booksItem);
 
-        JMenu authorsMenu = new JMenu("Authors");
-        JMenuItem authorsItem = new JMenuItem("Authors");
-        authorsItem.addActionListener(e -> switchPanel("AuthorsPanel"));
-        authorsMenu.add(authorsItem);
+            JMenu authorsMenu = new JMenu("Authors");
+            JMenuItem authorsItem = new JMenuItem("Authors");
+            authorsItem.addActionListener(e -> switchPanel("AuthorsPanel"));
+            authorsMenu.add(authorsItem);
 
-        JMenu borrowedBooksMenu = new JMenu("Borrowed Books");
-        JMenuItem bookAuthorsItem = new JMenuItem("Borrowed Books");
-        bookAuthorsItem.addActionListener(e -> switchPanel("BorrowedBooksPanel"));
-        borrowedBooksMenu.add(bookAuthorsItem);
+            JMenu genresMenu = new JMenu("Genres");
+            JMenuItem genresItem = new JMenuItem("Genres");
+            genresItem.addActionListener(e -> switchPanel("GenresPanel"));
+            genresMenu.add(genresItem);
 
-        menuBar.add(navigateMenu);
-        menuBar.add(usersMenu);
-        menuBar.add(booksMenu);
-        menuBar.add(genresMenu);
-        menuBar.add(authorsMenu);
-        menuBar.add(borrowedBooksMenu);
+            JMenu borrowedBooksMenu = new JMenu("Borrowed Books");
+            JMenuItem borrowedBooksItem = new JMenuItem("Borrowed Books");
+            borrowedBooksItem.addActionListener(e -> switchPanel("BorrowedBooksPanel"));
+            borrowedBooksMenu.add(borrowedBooksItem);
 
-        setJMenuBar(menuBar);
+            menuBar.add(navigateMenu);
+            menuBar.add(usersMenu);
+            menuBar.add(booksMenu);
+            menuBar.add(authorsMenu);
+            menuBar.add(genresMenu);
+            menuBar.add(borrowedBooksMenu);
+        } else { // if user is not logged in
+            JMenuItem loginItem = new JMenuItem("Login");
+            loginItem.addActionListener(e -> {
+                switchPanel("LoginPanel");
+                updateMenu();  // Update menu after switching panel
+            });
+            navigateMenu.add(loginItem);
+
+            JMenuItem registerItem = new JMenuItem("Register");
+            registerItem.addActionListener(e -> {
+                switchPanel("RegistrationPanel");
+                updateMenu();  // Update menu after switching panel
+            });
+            navigateMenu.add(registerItem);
+
+            menuBar.add(navigateMenu);
+        }
+
+        menuBar.revalidate();
+        menuBar.repaint();
     }
 
     // Method to switch panels
     public void switchPanel(String cardName) {
         cardLayout.show(cardPanel, cardName);
+        updateMenu();  // Update menu after switching panel
     }
 }

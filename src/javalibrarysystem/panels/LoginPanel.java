@@ -1,7 +1,7 @@
 package javalibrarysystem.panels;
 
 import javax.swing.*;
-
+import javax.swing.border.Border;
 import javalibrarysystem.LoginManager;
 import javalibrarysystem.MainUI;
 
@@ -19,13 +19,13 @@ public class LoginPanel extends JPanel {
     public LoginPanel(MainUI mainFrame) {
         this.mainFrame = mainFrame;
         setLayout(new BorderLayout(10, 10));
-
+        LogoPanel logoPanel = new LogoPanel();
         // Create a panel for form elements with FlowLayout
         JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         // Initialize components
-        emailField = new JTextField(20);
-        passwordField = new JPasswordField(20);
+        emailField = new JTextField(13);
+        passwordField = new JPasswordField(13);
         loginButton = new JButton("Login");
         registerButton = new JButton("Register");
 
@@ -41,7 +41,9 @@ public class LoginPanel extends JPanel {
         buttonPanel.add(registerButton);
 
         // Add formPanel and buttonPanel to main panel
-        add(formPanel, BorderLayout.CENTER);
+        add(formPanel, BorderLayout.NORTH);
+        add(logoPanel,BorderLayout.CENTER);
+                
         add(buttonPanel, BorderLayout.SOUTH);
 
         // Event handling
@@ -61,6 +63,7 @@ public class LoginPanel extends JPanel {
         });
     }
 
+
     private void handleLogin() {
         String email = emailField.getText();
         char[] password = passwordField.getPassword();
@@ -68,8 +71,10 @@ public class LoginPanel extends JPanel {
         if (LoginManager.login(email, new String(password))) {
             // Login successful
             JOptionPane.showMessageDialog(this, "Login Successful", "Success", JOptionPane.INFORMATION_MESSAGE);
-            // Switch to another panel or functionality as needed
-            // Example: mainFrame.switchPanel("SomeOtherPanelName");
+           // If login is successful, update the menu
+           mainFrame.updateMenu();
+           // Switch to the BookPanel
+           mainFrame.switchPanel("BooksPanel");
         } else {
             // Login failed
             JOptionPane.showMessageDialog(this, "Invalid email or password", "Error", JOptionPane.ERROR_MESSAGE);
@@ -80,4 +85,5 @@ public class LoginPanel extends JPanel {
         // Switch to the registration panel
         mainFrame.switchPanel("RegistrationPanel");
     }
+   
 }

@@ -19,11 +19,11 @@ public class RegistrationPanel extends JPanel {
 
         // Create a panel for form elements with FlowLayout
         JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-
+        LogoPanel logoPanel = new LogoPanel();
         // Initialize components
-        nameField = new JTextField(20);
-        emailField = new JTextField(20);
-        passwordField = new JPasswordField(20);
+        nameField = new JTextField(10);
+        emailField = new JTextField(13);
+        passwordField = new JPasswordField(13);
         registerButton = new JButton("Register");
 
         // Add components to form panel
@@ -39,7 +39,8 @@ public class RegistrationPanel extends JPanel {
         buttonPanel.add(registerButton);
 
         // Add formPanel and buttonPanel to main panel
-        add(formPanel, BorderLayout.CENTER);
+        add(formPanel, BorderLayout.NORTH);
+        add(logoPanel,BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
         // Event handling

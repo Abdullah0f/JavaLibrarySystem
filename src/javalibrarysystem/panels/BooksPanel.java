@@ -13,7 +13,7 @@ public class BooksPanel extends JPanel {
 
     private JTable booksTable;
     private DefaultTableModel tableModel;
-    private JTextField nameField, userIdField, genreIdField, authorIdField, publishDateField;
+    private JTextField nameField, genreIdField, authorIdField, publishDateField;
     private JButton addButton, deleteButton, updateButton;
 
     public BooksPanel() {
@@ -35,16 +35,16 @@ public class BooksPanel extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
 
         // Add action listeners
-        addButton.addActionListener(this::addBook);
-        deleteButton.addActionListener(this::deleteBook);
-        updateButton.addActionListener(this::updateBook);
+        addButton.addActionListener(e -> this.addBook(e));
+        deleteButton.addActionListener(e -> this.deleteBook(e));
+        updateButton.addActionListener(e -> this.updateBook(e));
 
         // Load initial book data
         loadBookData();
     }
 
     private void initializeTable() {
-        String[] columnNames = {"ID", "Name", "UserID", "GenreID", "AuthorID", "Publish Date"};
+        String[] columnNames = {"ID", "Name", "GenreID", "AuthorID", "Publish Date"};
         tableModel = new DefaultTableModel(columnNames, 0);
         booksTable = new JTable(tableModel);
     }
@@ -52,15 +52,12 @@ public class BooksPanel extends JPanel {
     private void initializeForm() {
         JPanel formPanel = new JPanel(new GridLayout(0, 2));
         nameField = new JTextField(20);
-        userIdField = new JTextField(20);
         genreIdField = new JTextField(20);
         authorIdField = new JTextField(20);
         publishDateField = new JTextField(20); // Format: yyyy-[m]m-[d]d
 
         formPanel.add(new JLabel("Name:"));
         formPanel.add(nameField);
-        formPanel.add(new JLabel("UserID:"));
-        formPanel.add(userIdField);
         formPanel.add(new JLabel("GenreID:"));
         formPanel.add(genreIdField);
         formPanel.add(new JLabel("AuthorID:"));
@@ -73,7 +70,6 @@ public class BooksPanel extends JPanel {
 
     private void addBook(ActionEvent e) {
         String name = nameField.getText();
-        int userId = Integer.parseInt(userIdField.getText());
         int genreId = Integer.parseInt(genreIdField.getText());
         int authorId = Integer.parseInt(authorIdField.getText());
         String publishDateText = publishDateField.getText();
@@ -86,13 +82,10 @@ public class BooksPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Author ID does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if (!User.exists(userId)) {
-            JOptionPane.showMessageDialog(this, "User ID does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        
         try {
             Date publishDate = Date.valueOf(publishDateText);// Convert String to Date
-            Book.insert(name, userId, genreId, authorId, publishDate);
+            Book.insert(name, genreId, authorId, publishDate);
             loadBookData();
         } catch (IllegalArgumentException ex) {
             JOptionPane.showMessageDialog(this, "Invalid date format. Please use the format: 1999-09-09");
@@ -114,12 +107,11 @@ public class BooksPanel extends JPanel {
         if (selectedRow >= 0) {
             int bookId = (int) booksTable.getValueAt(selectedRow, 0);
             String name = nameField.getText();
-            int userId = Integer.parseInt(userIdField.getText());
             int genreId = Integer.parseInt(genreIdField.getText());
             int authorId = Integer.parseInt(authorIdField.getText());
             Date publishDate = Date.valueOf(publishDateField.getText());
 
-            Book.update(bookId, name, userId, genreId, authorId, publishDate);
+            Book.update(bookId, name, genreId, authorId, publishDate);
 
             loadBookData();
         }

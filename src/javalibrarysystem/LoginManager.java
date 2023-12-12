@@ -5,6 +5,7 @@ import java.sql.*;
 import javalibrarysystem.models.User;
 
 public class LoginManager {
+    private static boolean isLoggedIn = false;
 
     // Method to handle user registration
     public static boolean register(String name, String email, String password) {
@@ -33,7 +34,8 @@ public class LoginManager {
             if (rs.next()) {
                 String storedPassword = rs.getString("password");
                 // Compare the hashed password with the stored hashed password
-                return checkPassword(password, storedPassword);
+                isLoggedIn = checkPassword(password, storedPassword);
+                return isLoggedIn;
             }
 
             return false; // User not found
@@ -43,7 +45,17 @@ public class LoginManager {
         }
     }
 
-    private static boolean checkPassword(String plainPassword, String storedPassword) {
+    // Method to check if the user is logged in
+    public static boolean isLoggedIn() {
+        return isLoggedIn;
+    }
+    
+    // Method to handle user logout
+    public static void logout() {
+        isLoggedIn = false;
+    }
+     private static boolean checkPassword(String plainPassword, String storedPassword) {
         return plainPassword.equals(storedPassword);
     }
+  
 }
