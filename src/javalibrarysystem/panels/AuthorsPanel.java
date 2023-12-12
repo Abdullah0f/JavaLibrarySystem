@@ -79,8 +79,12 @@ public class AuthorsPanel extends JPanel {
         int selectedRow = authorsTable.getSelectedRow();
         if (selectedRow >= 0) {
             int id = (Integer) tableModel.getValueAt(selectedRow, 0);
-            Author.delete(id);
-            loadAuthorData(); // Reload the author data to reflect the deletion
+            if (Author.hasBooks(id)) {
+                JOptionPane.showMessageDialog(this, "This author has books and cannot be deleted.");
+            } else {
+                Author.delete(id);
+                loadAuthorData(); // Reload the author data to reflect the deletion
+            }
         }
     }
 

@@ -75,6 +75,21 @@ public class Book {
             e.printStackTrace();
         }
     }
+    public static boolean isBorrowed(int id) {
+    DB db = new DB();
+    String query = "SELECT COUNT(*) FROM library.borrowedbooks WHERE bookId = ?";
+    try (Connection conn = db.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(query)) {
+        pstmt.setInt(1, id);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
 
     // Method to update a book's information
     public static void update(int id, String name, int genreId, int authorId, Date publishDate) {

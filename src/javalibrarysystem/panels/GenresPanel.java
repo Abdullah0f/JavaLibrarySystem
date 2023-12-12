@@ -64,14 +64,18 @@ public class GenresPanel extends JPanel {
         loadGenreData(); // Reload the genre data to reflect the new entry
     }
 
-    private void deleteGenre(ActionEvent e) {
-        int selectedRow = genresTable.getSelectedRow();
-        if (selectedRow >= 0) {
-            int id = (Integer) tableModel.getValueAt(selectedRow, 0);
+private void deleteGenre(ActionEvent e) {
+    int selectedRow = genresTable.getSelectedRow();
+    if (selectedRow >= 0) {
+        int id = (Integer) tableModel.getValueAt(selectedRow, 0);
+        if (Genre.hasBooks(id)) {
+            JOptionPane.showMessageDialog(this, "This genre is associated with books and cannot be deleted.");
+        } else {
             Genre.delete(id);
             loadGenreData(); // Reload the genre data to reflect the deletion
         }
     }
+}
 
     private void updateGenre(ActionEvent e) {
         int selectedRow = genresTable.getSelectedRow();

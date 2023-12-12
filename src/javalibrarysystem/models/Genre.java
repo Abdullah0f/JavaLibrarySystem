@@ -71,7 +71,21 @@ public class Genre {
             e.printStackTrace();
         }
     }
-
+    public static boolean hasBooks(int id) {
+    DB db = new DB();
+    String query = "SELECT COUNT(*) FROM library.books WHERE genreId = ?";
+    try (Connection conn = db.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(query)) {
+        pstmt.setInt(1, id);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
     // Method to update a genre's information
     public static void update(int id, String genre) {
         DB db = new DB();

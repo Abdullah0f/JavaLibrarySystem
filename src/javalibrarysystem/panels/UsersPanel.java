@@ -73,15 +73,18 @@ public class UsersPanel extends JPanel {
         loadUserData(); // Refresh the table after adding a user
     }
 
-    private void deleteUser(ActionEvent e) {
-        // Implement deleting a selected user
-        int selectedRow = usersTable.getSelectedRow();
-        if (selectedRow >= 0) {
-            int userId = (Integer) tableModel.getValueAt(selectedRow, 0);
+private void deleteUser(ActionEvent e) {
+    int selectedRow = usersTable.getSelectedRow();
+    if (selectedRow >= 0) {
+        int userId = (Integer) tableModel.getValueAt(selectedRow, 0);
+        if (User.hasBorrowedBooks(userId)) {
+            JOptionPane.showMessageDialog(this, "This user has borrowed books and cannot be deleted.");
+        } else {
             User.delete(userId);
-            loadUserData(); // Refresh the table after deleting a user
+            loadUserData(); // Reload the user data to reflect the deletion
         }
     }
+}
 
     private void updateUser(ActionEvent e) {
         // Implement updating a selected user

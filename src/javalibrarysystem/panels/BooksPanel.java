@@ -92,15 +92,18 @@ public class BooksPanel extends JPanel {
         }
     }
 
-    private void deleteBook(ActionEvent e) {
-        int selectedRow = booksTable.getSelectedRow();
-        if (selectedRow >= 0) {
-            int bookId = (int) booksTable.getValueAt(selectedRow, 0);
+private void deleteBook(ActionEvent e) {
+    int selectedRow = booksTable.getSelectedRow();
+    if (selectedRow >= 0) {
+        int bookId = (int) booksTable.getValueAt(selectedRow, 0);
+        if (Book.isBorrowed(bookId)) {
+            JOptionPane.showMessageDialog(this, "This book is currently borrowed and cannot be deleted.");
+        } else {
             Book.delete(bookId);
-
-            loadBookData();
+            loadBookData(); // Reload the book data to reflect the deletion
         }
     }
+}
 
     private void updateBook(ActionEvent e) {
         int selectedRow = booksTable.getSelectedRow();

@@ -81,6 +81,21 @@ public class User {
             e.printStackTrace();
         }
     }
+    public static boolean hasBorrowedBooks(int id) {
+    DB db = new DB();
+    String query = "SELECT COUNT(*) FROM library.borrowedbooks WHERE userId = ?";
+    try (Connection conn = db.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(query)) {
+        pstmt.setInt(1, id);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
 
     // Method to update a user's information
     public static void update(int id, String name, String email, String password) {
